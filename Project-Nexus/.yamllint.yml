@@ -1,0 +1,27 @@
+---
+extends: default
+
+rules:
+  truthy:
+    allowed-values:
+      - "YES"
+      - "Yes"
+      - "yes"
+      - "NO"
+      - "No"
+      - "no"
+      - "TRUE"
+      - "True"
+      - "true"
+      - "FALSE"
+      - "False"
+      - "false"
+      - "ON"
+      - "On"
+      - "on"
+      - "OFF"
+      - "Off"
+      - "off"
+  line-length:
+    max: 120
+    allow-non-breakable-words: true
