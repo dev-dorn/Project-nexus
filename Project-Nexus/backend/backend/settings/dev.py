@@ -1,3 +1,4 @@
+import sys
 from .base import *
 
 # Hardcode development settings
@@ -32,3 +33,12 @@ DATABASES = {
         'PORT': '5432',
     }
 }
+if 'test' in sys.argv:
+    DATABASES['default'] = {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': ':memory:',
+    }
+
+    PASSWORD_HASHERS = [
+        'django.contrib.auth.hashers.MD5PasswordHasher',
+    ]
