@@ -1,0 +1,110 @@
+# Django
+*.log
+*.pot
+*.pyc
+__pycache__/
+local_settings.py
+db.sqlite3
+media/
+staticfiles/
+
+# Environment
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Docker
+.dockerignore
+
+# Coverage
+.coverage
+.coverage.*
+htmlcov/
+.coverage
+*.cover
+.pytest_cache/
+
+# Database
+*.db
+*.sqlite3
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Backups
+backups/
+*.backup
+
+# SSL
+ssl/
+*.pem
+*.key
+*.crt
+*.csr
+
+# Temporary files
+*.tmp
+*.temp
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# Documentation
+docs/_build/
+
+# Node.js (if frontend exists)
+node_modules/
+npm-debug.log*
+
+# PyCharm
+.idea/
+
+# VS Code
+.vscode/
+
+# MacOS
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Local development
+.local/
+.terraform/
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# Project specific
+/backend/media/
+/backend/staticfiles/
