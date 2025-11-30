@@ -1,10 +1,10 @@
 services:
   - type: web
     name: project-nexus
-    env: python
     plan: free
-    buildCommand: "./build.sh"
-    startCommand: "cd backend && gunicorn your_project_name.wsgi:application --bind 0.0.0.0:$PORT"
+    docker:
+      dockerfile: backend/Dockerfile
+      context: /
     envVars:
       - key: DATABASE_URL
         fromDatabase:
@@ -14,8 +14,8 @@ services:
         generateValue: true
       - key: DEBUG
         value: false
-      - key: WEB_CONCURRENCY
-        value: 4
+      - key: ALLOWED_HOSTS
+        value: ".onrender.com"
 
 databases:
   - name: project-nexus-db

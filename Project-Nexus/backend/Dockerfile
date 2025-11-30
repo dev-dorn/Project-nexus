@@ -18,8 +18,8 @@ RUN apt-get update \
 # Copy requirements first for better caching
 COPY requirements /app/requirements/
 
-# Install Python dependencies
-RUN pip install --no-cache-dir -r requirements/dev.txt
+# Install Python dependencies for PRODUCTION
+RUN pip install --no-cache-dir -r requirements/production.txt
 
 # Copy project code
 COPY . /app/
@@ -29,8 +29,11 @@ RUN useradd --create-home --shell /bin/bash app \
     && chown -R app:app /app
 USER app
 
+# Collect static files
+RUN python manage.py collectstatic --noinput
+
 # Expose port
 EXPOSE 8000
 
-# Development command
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+# PRODUCTION command (not development runserver)
+CMD ["gunicorn", "backend.wsgi:application", "--bind", "0.0.0.0:8000"]
