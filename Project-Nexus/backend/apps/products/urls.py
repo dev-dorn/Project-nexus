@@ -19,5 +19,4 @@ urlpatterns = [
     path('products/featured/', views.FeaturedProductsView.as_view(), name='featured-products'),
     
     # Reviews
-    path('products/<slug:slug>/reviews/', views.ProductReviewListView.as_view(), name='product-reviews'),
 ]

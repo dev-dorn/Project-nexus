@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: project-nexus
+    env: python
+    plan: free
+    buildCommand: "./build.sh"
+    startCommand: "cd backend && gunicorn your_project_name.wsgi:application --bind 0.0.0.0:$PORT"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: project-nexus-db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: false
+      - key: WEB_CONCURRENCY
+        value: 4
+
+databases:
+  - name: project-nexus-db
+    plan: free

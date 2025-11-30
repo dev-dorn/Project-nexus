@@ -3,8 +3,21 @@ from django.core.validators import MinValueValidator
 from django.utils.text import slugify
 from apps.accounts.models import User
 from apps.products.models import Product
-import uuid
 
+class ShippingMethod(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField(blank=True, null=True)
+    price = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+    estimated_days_min = models.PositiveIntegerField(default=3)
+    estimated_days_max = models.PositiveIntegerField(default=7)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['price']
+    
+    def __str__(self):
+        return f"{self.name} - ${self.price}"
 class Order(models.Model):
     ORDER_STATUS = [
         ('pending', 'Pending'),
@@ -77,7 +90,13 @@ class Order(models.Model):
     shipped_at = models.DateTimeField(blank=True, null=True)
     delivered_at = models.DateTimeField(blank=True, null=True)
     cancelled_at = models.DateTimeField(blank=True, null=True)
-
+    shipping_method = models.ForeignKey(
+         ShippingMethod,
+         on_delete=models.SET_NULL,
+         null=True,
+         blank=True,
+         related_name='orders'
+     )
     class Meta:
         ordering = ['-created_at']
         indexes = [
@@ -136,6 +155,7 @@ class Order(models.Model):
             self.billing_country
         ]
         return ', '.join(filter(None, address_parts))
+     
 
 
 class OrderItem(models.Model):

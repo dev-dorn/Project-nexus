@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Category, Brand, Product, ProductImage, ProductReview
+from .models import Category, Brand, Product, ProductImage
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -77,22 +77,3 @@ class ProductDetailSerializer(ProductListSerializer):
         ]
 
 
-class ProductReviewSerializer(serializers.ModelSerializer):
-    user_name = serializers.CharField(source='user.full_name', read_only=True)
-    user_email = serializers.CharField(source='user.email', read_only=True)
-    product_name = serializers.CharField(source='product.name', read_only=True)
-    images = serializers.SerializerMethodField()
-
-    class Meta:
-        model = ProductReview
-        fields = [
-            'id', 'product', 'product_name', 'user', 'user_name', 'user_email',
-            'rating', 'title', 'comment', 'is_approved', 
-            'helpful_count', 'images', 'created_at', 'updated_at'
-        ]
-        read_only_fields = ['user', 'created_at', 'updated_at']
-
-    def get_images(self, obj):
-        from .models import ReviewImage
-        images = ReviewImage.objects.filter(review=obj)
-        return [image.image.url for image in images]

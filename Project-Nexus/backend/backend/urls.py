@@ -9,7 +9,11 @@ api_v1_patterns = [
     path('auth/', include('apps.accounts.urls')),
     path('products/', include('apps.products.urls')),
     path('orders/', include('apps.orders.urls')),
-]
+    path('cart/', include('apps.cart.urls')),
+    path('reviews/', include('apps.reviews.urls'))
+
+,]
+
 
 urlpatterns = [
     # Admin
@@ -24,7 +28,7 @@ urlpatterns = [
     path('api/v1/', include(api_v1_patterns)),
     
     # Legacy/auth endpoints (keep for backwards compatibility during development)
-    path('auth/', include('apps.accounts.urls')),
+
 ]
 
 if settings.DEBUG:

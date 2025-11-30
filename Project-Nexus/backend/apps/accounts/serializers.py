@@ -121,3 +121,4 @@ class UserActivitySerializer(serializers.ModelSerializer):
         model = UserActivity
         fields = ('activity_type', 'description', 'ip_address', 'user_agent', 'created_at')
         read_only_fields = ('user', 'activity_type', 'description', 'ip_address', 'user_agent', 'created_at')
+

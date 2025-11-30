@@ -6,10 +6,10 @@ from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Q, Count, Avg
 from django.utils import timezone
 
-from .models import Category, Brand, Product, ProductReview
+from .models import Category, Brand, Product
 from .serializers import (
     CategorySerializer, BrandSerializer, ProductListSerializer,
-    ProductDetailSerializer, ProductReviewSerializer
+    ProductDetailSerializer
 )
 from .filters import ProductFilter
 
@@ -105,22 +105,6 @@ class FeaturedProductsView(generics.ListAPIView):
             is_featured=True
         ).select_related('category', 'brand').prefetch_related('images')[:12]
 
-
-class ProductReviewListView(generics.ListCreateAPIView):
-    serializer_class = ProductReviewSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-
-    def get_queryset(self):
-        product_slug = self.kwargs.get('slug')
-        return ProductReview.objects.filter(
-            product__slug=product_slug,
-            is_approved=True
-        ).select_related('user', 'product')
-
-    def perform_create(self, serializer):
-        product_slug = self.kwargs.get('slug')
-        product = Product.objects.get(slug=product_slug)
-        serializer.save(user=self.request.user, product=product)
 
 
 @api_view(['GET'])

@@ -1,7 +1,7 @@
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 from django.utils import timezone
-from .models import Order, OrderItem, OrderStatusHistory
+from .models import Order, OrderItem
 
 @receiver(pre_save, sender=Order)
 def update_order_timestamps(sender, instance, **kwargs):
@@ -29,46 +29,10 @@ def update_order_timestamps(sender, instance, **kwargs):
         except Order.DoesNotExist:
             pass
 
-@receiver(post_save, sender=Order)
-def create_status_history(sender, instance, created, **kwargs):
-    """Create status history record when order status changes"""
-    if created:
-        # For new orders, record the initial status
-        OrderStatusHistory.objects.create(
-            order=instance,
-            new_status=instance.status,
-            notes="Order created"
-        )
-    else:
-        # For existing orders, check if status changed
-        try:
-            old_instance = Order.objects.get(pk=instance.pk)
-            if old_instance.status != instance.status:
-                OrderStatusHistory.objects.create(
-                    order=instance,
-                    old_status=old_instance.status,
-                    new_status=instance.status,
-                    notes=f"Status changed from {old_instance.status} to {instance.status}"
-                )
-        except Order.DoesNotExist:
-            pass
-
 @receiver(post_save, sender=OrderItem)
-@receiver(post_save, sender=Order)
-def update_inventory_on_status_change(sender, instance, **kwargs):
-    """Update product inventory when order status changes"""
-    if isinstance(instance, Order):
-        order = instance
-        if order.status in ['confirmed', 'processing']:
-            # Reduce inventory when order is confirmed
-            for item in order.items.all():
-                if item.product.track_quantity:
-                    item.product.quantity = max(0, item.product.quantity - item.quantity)
-                    item.product.save()
-        
-        elif order.status in ['cancelled', 'refunded']:
-            # Restore inventory when order is cancelled or refunded
-            for item in order.items.all():
-                if item.product.track_quantity:
-                    item.product.quantity += item.quantity
-                    item.product.save()
+def update_inventory_on_order(sender, instance, created, **kwargs):
+    """Update product inventory when order items are added"""
+    if created and instance.order.status in ['confirmed', 'processing']:
+        if instance.product.track_quantity:
+            instance.product.quantity = max(0, instance.product.quantity - instance.quantity)
+            instance.product.save()
