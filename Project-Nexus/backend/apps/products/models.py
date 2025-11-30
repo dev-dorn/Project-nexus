@@ -4,8 +4,7 @@ from django.utils.text import slugify
 from django.urls import reverse
 from apps.accounts.models import User
 import uuid
-
-
+from .managers import ProductManager
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(max_length=100, unique=True)
@@ -141,7 +140,7 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     published_at = models.DateTimeField(blank=True, null=True)
-
+    objects = ProductManager()
     class Meta:
         ordering = ['-created_at']
 

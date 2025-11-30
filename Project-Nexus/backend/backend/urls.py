@@ -8,6 +8,7 @@ from django.conf.urls.static import static
 api_v1_patterns = [
     path('auth/', include('apps.accounts.urls')),
     path('products/', include('apps.products.urls')),
+    path('orders/', include('apps.orders.urls')),
 ]
 
 urlpatterns = [
